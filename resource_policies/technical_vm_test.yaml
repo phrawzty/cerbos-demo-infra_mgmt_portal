@@ -1,0 +1,75 @@
+name: Technical resource test suite
+options:
+  # This sets the relative timeframe of the test suite.
+  now: "2024-11-15T12:00:00.000Z" 
+
+tests:
+  - name: "customer devops virtual machine"
+    input:
+      principals:
+        - h_d_helena
+      resources:
+        # resource is in Helena's org
+        - virtual_machine_001 
+        - virtual_machine_001_snapshot
+        # resource is NOT in Helena's org
+        - virtual_machine_002 
+      actions:
+        - view
+        - snapshot
+    expected:
+      - principal: h_d_helena
+        resource: virtual_machine_001
+        actions:
+          view: EFFECT_ALLOW
+      - principal: h_d_helena
+        resource: virtual_machine_002
+        actions:
+          view: EFFECT_DENY
+      - principal: h_d_helena
+        resource: virtual_machine_001_snapshot
+        actions:
+          snapshot: EFFECT_DENY # this was created less than 15 minutes ago
+          view: EFFECT_ALLOW
+  
+  - name: "customer mobile virtual machine"
+    input:
+      principals:
+        - h_m_ikane
+      resources:
+        # resource is in Ikane's org
+        - virtual_machine_001 
+        # resource is NOT in Ikane's org
+        - virtual_machine_002 
+      actions:
+        - view
+        - create
+    expected:
+      - principal: h_m_ikane
+        resource: virtual_machine_001
+        actions:
+          view: EFFECT_ALLOW
+      - principal: h_m_ikane
+        resource: virtual_machine_001
+        actions:
+          create: EFFECT_DENY
+
+  - name: "internal support virtual machine"
+    input:
+      principals:
+        - i_s_tyler
+        - i_s_pika
+      resources:
+        - virtual_machine_001
+      actions:
+        - view
+    expected:
+      - principal: i_s_tyler
+        resource: virtual_machine_001
+        actions:
+          view: EFFECT_ALLOW
+      - principal: i_s_pika
+        resource: virtual_machine_001
+        actions:
+          # Pika is not using an acceptable IP range
+          view: EFFECT_DENY 

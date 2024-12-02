@@ -1,0 +1,39 @@
+apiVersion: api.cerbos.dev/v1
+resourcePolicy:
+  version: default
+  importDerivedRoles:
+    - common_roles
+
+  resource: technical:serverless_function
+  rules:
+    # A devops-type customer can do anything to the serverless functions
+    - actions: ['view', 'modify', 'snapshot', 'start-stop', 'restore', 'delete']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - customer_devops
+
+    - actions: ['create']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - customer_devops
+      condition:
+        match:
+          expr: R.attr.count <= R.attr.limit
+
+    # A mobile-type customer can play around with serverless functions
+    - actions: ['view', 'create', 'modify', 'start-stop', 'delete']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - customer_mobile
+
+    # Internal support team can perform any action on any serverless function.
+    - actions: ['*']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - internal_support
+    
+    # Account manager can view serverless functions.
+    - actions: ['view']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - internal_account_manager

@@ -1,0 +1,80 @@
+name: Technical resource test suite
+options:
+  now: "2024-11-15T12:00:00.000Z" # This sets the relative timeframe of the test suite.
+
+tests:
+  - name: "customer devops serverless function"
+    input:
+      principals:
+        - h_d_helena
+        - w_d_walter
+      resources:
+        - serverless_function_001 # Helena's org
+        - serverless_function_002 # Walter's org
+      actions:
+        - view
+        - create
+    expected:
+      - principal: h_d_helena
+        resource: serverless_function_001
+        actions:
+          view: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+      - principal: h_d_helena
+        resource: serverless_function_002
+        actions:
+          view: EFFECT_DENY
+          create: EFFECT_DENY
+      - principal: w_d_walter
+        resource: serverless_function_001
+        actions:
+          view: EFFECT_DENY
+          create: EFFECT_DENY
+      - principal: w_d_walter
+        resource: serverless_function_002
+        actions:
+          view: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+  
+  - name: "customer mobile serverless function"
+    input:
+      principals:
+        - h_m_ikane
+      resources:
+        - serverless_function_001
+        - serverless_function_002
+      actions:
+        - view
+        - create
+    expected:
+      - principal: h_m_ikane
+        resource: serverless_function_001
+        actions:
+          view: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+      # Hmm, why is this test failing?
+      - principal: h_m_ikane
+        resource: serverless_function_002
+        actions:
+          view: EFFECT_DENY
+          create: EFFECT_DENY
+        
+
+  - name: "internal support virtual machine"
+    input:
+      principals:
+        - i_s_tyler
+        - i_s_pika
+      resources:
+        - serverless_function_001
+      actions:
+        - view
+    expected:
+      - principal: i_s_tyler
+        resource: serverless_function_001
+        actions:
+          view: EFFECT_ALLOW
+      - principal: i_s_pika
+        resource: serverless_function_001
+        actions:
+          view: EFFECT_DENY # Pika is not using an acceptable IP range

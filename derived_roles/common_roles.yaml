@@ -1,0 +1,58 @@
+apiVersion: api.cerbos.dev/v1
+derivedRoles:
+  name: common_roles
+  definitions:
+
+    - name: customer_devops
+      parentRoles:
+        - customer
+      condition:
+        match:
+          all:
+            of:
+            - expr: P.attr.team == "devops"
+            # The resource has to be in the customer's org
+            - expr: request.resource.attr.org == P.attr.org
+
+    - name: customer_mobile
+      parentRoles:
+        - customer
+      condition:
+        match:
+          all:
+            of:
+            # The resource has to be in the customer's org
+            - expr: P.attr.team == "mobile"
+            - expr: request.resource.attr.org == P.attr.org
+
+    - name: customer_billing
+      parentRoles:
+        - customer
+      condition:
+        match:
+          all:
+            of:
+            # The resource has to be in the customer's org
+            - expr: P.attr.team == "billing"
+            - expr: request.resource.attr.org == P.attr.org
+
+    - name: internal_support
+      parentRoles:
+        - internal
+      condition:
+        match:
+          all:
+            of:
+              - expr: P.attr.team == "support"
+              - expr: P.attr.ip.inIPAddrRange("10.100.0.0/16")
+
+    # Account managers can only see the accounts they manage
+    - name: internal_account_manager
+      parentRoles:
+        - internal
+      condition:
+        match:
+          all:
+            of:
+              - expr: P.attr.team == "account_manager"
+              - expr: R.attr.org in P.attr.org

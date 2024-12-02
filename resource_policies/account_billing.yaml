@@ -1,0 +1,25 @@
+apiVersion: api.cerbos.dev/v1
+resourcePolicy:
+  version: default
+  importDerivedRoles:
+    - common_roles
+
+  resource: account:billing
+  rules:
+    # Customer billing role can interact with their own billing info.
+    - actions: ['view', 'create', 'modify', 'view_limits', 'modify_limits']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - customer_billing
+
+    # Internal support team can perform view basic account info for any org.
+    - actions: ['view']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - internal_support
+
+    # Internal account manager can interact with their accounts, but not change billing info.
+    - actions: ['view', 'create', 'view_limits', 'modify_limits']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - internal_account_manager

@@ -1,0 +1,70 @@
+principals:
+# happy company
+  h_d_helena:
+    id: h_d_helena
+    roles:
+      - customer
+    attr:
+      team: devops
+      org: happy_company
+
+  h_m_ikane:
+    id: h_m_ikane
+    roles:
+      - customer
+    attr:
+      team: mobile
+      org: happy_company
+
+# waldo syndicate
+  w_d_walter:
+    id: w_d_walter
+    roles:
+      - customer
+    attr:
+      team: devops
+      org: waldo_syndicate
+
+  w_m_jesse:
+    id: w_m_jesse
+    roles:
+      - customer
+    attr:
+      team: mobile
+      org: waldo_syndicate
+
+  w_b_jean:
+    id: w_b_jean
+    roles:
+      - customer
+    attr:
+      team: billing
+      org: waldo_syndicate
+
+# internal
+  i_s_tyler:
+    id: i_s_tyler
+    roles:
+      - internal
+    attr:
+      team: support
+      ip: 10.100.10.45
+
+  i_s_pika:
+    id: i_s_pika
+    roles:
+      - internal
+    attr:
+      team: support
+      # Uh oh, this looks suspicious.
+      ip: 192.168.43.1 
+
+  i_a_loretta:
+    id: i_a_loretta
+    roles:
+      - internal
+    attr:
+      team: account_manager
+      org:
+        - waldo_syndicate
+        - happy_company

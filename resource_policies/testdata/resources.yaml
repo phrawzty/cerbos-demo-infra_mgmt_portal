@@ -1,0 +1,87 @@
+resources:
+# technical resources
+  virtual_machine_001:
+    id: virtual_machine_001
+    kind: technical:virtual_machine
+    attr:
+      org: happy_company
+  
+  virtual_machine_001_snapshot:
+    id: virtual_machine_001_snapshot
+    kind: technical:virtual_machine
+    attr:
+      org: happy_company
+      createdAt: "2024-11-15T11:55:00.000Z"
+      # Using the createdAt below will cause the test suite to fail (correctly)
+      #createdAt: "2024-11-15T11:38:00.000Z" 
+
+  virtual_machine_002:
+    id: virtual_machine_002
+    kind: technical:virtual_machine
+    attr:
+      org: waldo_syndicate
+
+  # This is Happy Company's first serverless function
+  serverless_function_001:
+    id: serverless_function_001
+    kind: technical:serverless_function
+    attr:
+      org: happy_company
+      # For some reason, they are only allowed to have one function
+      limit: 1 
+      count: 1
+
+  # This is Happy Company's second serverless function
+  serverless_function_001_more:
+    id: serverless_function_001_more
+    kind: technical:serverless_function
+    attr:
+      org: happy_company
+      limit: 1
+      # Uh oh, that's more than their limit!
+      count: 2 
+
+  serverless_function_002:
+    id: serverless_function_002
+    kind: technical:serverless_function
+    attr:
+      org: waldo_syndicate
+      #limit: 5
+      #count: 1
+
+# Account information
+  account_data_001:
+    id: account_data_001
+    kind: account:general
+    attr:
+      org: happy_company
+
+  account_data_002:
+    id: account_data_002
+    kind: account:general
+    attr:
+      org: waldo_syndicate
+
+  account_data_003:
+    id: account_data_003
+    kind: account:data
+    attr:
+      org: supermegacorp
+
+  account_billing_001:
+    id: account_billing_001
+    kind: account:billing
+    attr:
+      org: happy_company
+
+  account_billing_002:
+    id: account_billing_002
+    kind: account:billing
+    attr:
+      org: waldo_syndicate
+
+  account_billing_003:
+    id: account_billing_003
+    kind: account:billing
+    attr:
+      org: supermegacorp

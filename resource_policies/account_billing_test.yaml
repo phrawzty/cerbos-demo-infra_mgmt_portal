@@ -1,0 +1,21 @@
+name: Account billing resource test suite
+
+tests:
+  - name: "internal account manager"
+    input:
+      principals:
+        - i_a_loretta
+      resources:
+        - account_billing_001
+        - account_billing_003
+      actions:
+        - view
+    expected:
+      - principal: i_a_loretta
+        resource: account_billing_001
+        actions:
+          view: EFFECT_ALLOW
+      - principal: i_a_loretta
+        resource: account_billing_003
+        actions:
+          view: EFFECT_DENY

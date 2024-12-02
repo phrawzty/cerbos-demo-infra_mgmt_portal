@@ -1,0 +1,40 @@
+apiVersion: api.cerbos.dev/v1
+resourcePolicy:
+  version: default
+  importDerivedRoles:
+    - common_roles
+
+  resource: technical:virtual_machine
+  rules:
+    # A devops-type customer can do anything to the virtual machines
+    - actions: ['view', 'create', 'modify', 'start-stop', 'restore', 'delete']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - customer_devops
+
+    # Snapshots can only be created 15 minutes apart
+    - actions: ['snapshot']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - customer_devops
+      condition:
+        match:
+          expr: timestamp(R.attr.createdAt).timeSince() > duration("15m")
+
+    # A mobile-type customer has limited acccess to virtual machines
+    - actions: ['view']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - customer_mobile
+
+    # Internal support team can perform any action on any virtual machine.
+    - actions: ['*']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - internal_support
+    
+    # Account manager can view virtual machines.
+    - actions: ['view']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - internal_account_manager
